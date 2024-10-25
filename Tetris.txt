@@ -1,0 +1,842 @@
+TETRIS								'Program name
+------
+
+Cls
+AxesOff
+GridOff
+LabelOff
+For 1 -> A To 20 Step 2
+Text A,2,"     "						'5 spaces
+Text A+2,2,"###"						'the SYBL menu and f6
+Text A+8,8,"#"							'Text: shift f4, f6, f6, f2
+Text A+14,8,"#"
+Next
+For 1 -> A To 25 Step 2
+Text A,22,"     "						'5 spaces
+Text A+2,22,"###"
+Text A+8,22,"##  "						'2 spaces after the #'s
+Text A+14,22,"###"
+Next
+For 1 -> A To 20 Step 2
+Text A,42,"     "						'5 spaces
+Text A+2,42,"###"
+Text A+8,48,"#"
+Text A+14,48,"#"
+Next
+For 1 -> A To 25 Step 2
+Text A,62,"     "						'5 spaces
+Text A+2,62,"###"
+Text A+8,62,"##  "						'2 spaces after the #'s
+Text A+14,62,"#"
+Text A+14,74,"#"
+Next
+For 1 -> A To 20 Step 2
+Text A,82,"     "						'5 spaces
+Text A+2,88,"#"
+Text A+8,88,"#"
+Text A+14,88,"#"
+Next
+For 1 -> A To 25 Step 2
+Text A,102,"     "						'5 spaces
+Text A+2,102,"  "						'2 spaces
+Text A+2,108,"##"
+Text A+8,102,"  "						'2 spaces
+Text A+8,108,"#  "						'2 spaces after the #
+Text A+14,102,"##  "						'2 spaces after the #'s
+Next
+For 1 -> A To 34
+Text 50,A," By:"						'note! 1 space before (By:)
+Next
+For 1 -> A To 125
+Next
+Text 50,52,"B. RASMUS ANTHIN"
+For 1 -> A To 18
+Text 1,1," "
+Next
+Text 5,30,"PUSH [EXE]"_						'_ = display
+ClrText
+Prog "TETMAIN"						'shift PRGM, f6, f4, f1
+
+
+
+TETMAIN								'Program name
+-------
+
+Lbl E						'Add this (ver. 3)
+ClrText
+"1: TYPE A"
+"2: TYPE B"? -> T
+ClrText
+"SHOW NEXT BLOCK"
+"[1/0]"? -> Z					' / : SYBL, f5
+ClrText
+"LEVEL [1-9]"? -> @				' @ : theta
+ClrText						'Add this (beta 2.1)
+100-@*10-10 -> @					' * : multiplication-symbol
+0 -> X
+0 -> G
+For 1 -> U To 7
+For 1 -> V To 21
+0->Mat A[U,V]
+Next
+Next
+7 -> B						'Change to this (Beta 2.2)
+Lbl A
+0 -> E						'Delete the former line (beta 2.1)
+0 -> O						'Change to this (Beta 2.2)
+0 -> I
+0 -> M
+If B=0
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E						'shift PRGM, f6, f4, f2
+Getkey=37 => Isz E
+E=-4 => -3 -> E
+E=3 => 2 -> E
+For 4 -> F To 5
+Locate C,F+E,"## "
+Next
+E >= -2 => E>H => Locate C,3+E,"   "				'3 spaces
+E <= 1 => E<H => Locate C,6+E,"   "				'3 spaces
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 => Goto 0	'<> means not equal.
+IfEnd								'Or: OPTN, f6, f6, f4, f2
+Next
+IfEnd
+If B=1
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E				'Change to this (Beta 2.2)
+Getkey=37 => Isz E				'Change to this (Beta 2.2)
+E <= -4 => -3 -> E
+E >= 4 => 3 -> E
+Getkey=27 => Isz I
+I=2 => 0 -> I
+If I=0
+Then If O=0 And C<21				'Change to this (ver. 4)
+Then E <= 2 => Locate C+1,5+E," "		'--------||-------------
+E <= 1 => Locate C+1,6+E," "			'--------||-------------
+E <= 0 =>Locate C+1,7+E," "			'--------||-------------
+1 -> O						'Add this (Beta 2.2)
+IfEnd
+Locate C,E+4,"OOOO "				'Remove the former line under this (Beta 2.2)
+E >= -2 => E>H => Locate C,3+E,"     "				'5 spaces
+E <= 2 => E<H => Locate C,5+E,"     "				'5 spaces
+If C>1
+Then Mat A[4+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then E >= 0 => 0 -> E				'Change to this (Beta 2.2)
+If O=1						'Remove the two former lines above (Beta 2.2)
+Then Isz C
+Dsz A
+If C<20						'Add this (ver. 4)
+Locate C+2,4+E,"  "						'2 spaces
+Locate C+2,5+E,"  "
+Locate C+2,6+E,"  "
+Locate C+2,7+E,"  "
+IfEnd						'Add this (ver. 4)
+0 -> O						'Add this line (Beta 2.2)
+IfEnd
+C<21 => E >= -2 => E>H => Locate C+1,3+E," "	'Remove the former line above (Beta 2.2)| Change to this (ver. 4)
+Locate C,4+E,"O "
+Locate C,5+E,"O "
+Locate C,6+E,"O "
+Locate C,7+E,"O "
+C<21 => E <= -1 => E<H => Locate C+1,8+E," "	'Change to this (ver. 4)
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 Or Mat A[6+E,C-1] <> 0 Or Mat A[7+E,C-1] <> 0 => Goto 0		
+IfEnd
+IfEnd
+Next
+IfEnd
+If B=2
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E				'Change to this (Beta 2.2)
+Getkey=37 => Isz E				'Change to this (Beta 2.2)
+E <= -4 => -3 -> E
+E >= 3 => 2 -> E
+Getkey=27 => Isz I
+I=4 => 0 -> I
+If I=0
+Then If O=0 And C<21				'Change to this (Beta 2.2)
+Then Locate C+1,E+6,"  "			'2 spaces (remove the former line (Beta 2.2))
+Locate C+1,E+4," "
+1 -> O						'Change to this (Beta 2.2)
+IfEnd
+C<21 => E>H => Locate C+1,E+4," "		'Change to this (ver. 4)
+C<19 => E >= -2 => E>H => Locate C+3,E+3," "	'---------||------------
+C<21 => E <= 1 => E<H => Locate C+1,E+6,"   "	'---------||------------| 3 spaces
+C<20 => Locate C+2,4+E,"x "					'x = multiplication-symbol
+Locate C,5+E,"xxx "
+If C>1
+Then C<21 => Mat A[4+E,C+1] <> 0 => Goto 0
+Mat A[5+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then If O=1 And C<19				'Change to this (ver. 4)
+Then Locate C+3,E+5," "				'Remove the former line (Beta 2.2)
+Locate C+3,E+4," "
+2 -> O						'Add this (Beta 2.2)
+IfEnd
+E >= 2 => 1 -> E
+E >= -2 => E>H => Locate C,E+3,"   "				'3 spaces
+C<21 => E <= 0 => E<H => Locate C+1,E+7,"  "	'Change to this (ver. 4)| 2 spaces
+Locate C,E+4,"xx "
+C<21 => Locate C+1,E+5,"x "			'Change to this (ver. 4)
+C<21 => Locate C+1,E+6,"x "			'---------||------------
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C] <> 0 Or Mat A[6+E,C] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=2
+Then O=2 => C<20 => E <= 1 => Locate C+2,E+6," "	'Change to this (ver. 4)
+C<21 => E >= -2 => E>H => Locate C+1,E+3,"   "		'---------||------------| 3 spaces
+C<21 => E <= 1 => E<H => Locate C+1,E+6," "		'Change to this (ver. 4)
+Locate C,E+4,"xxx "
+Locate C,E+5,"x   "
+3 -> O							'Add this (ver. 4)
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=3
+Then E >= 1 => 1 -> E				'Change to this, and remove the line under this (Beta 2.2)
+C<21 => E >= -2 => E>H => Locate C+1,E+3," "	'Change to this (ver. 4)
+C<21 => E <= 0 => E<H => Locate C+1,E+7,"  "	'---------||------------| 2 spaces
+O=3 => C<20 => Locate C+2,E+4,"  "		'---------||------------| 2 spaces
+0 -> O						'Add this (Beta 2.2)
+Locate C,E+4,"x "
+Locate C,E+5,"x  "
+Locate C,E+6,"xx "
+If C>1
+Then Mat A[E+4,C-1] <> 0 Or Mat A[E+5,C-1] <> 0 Or Mat A[E+6,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+Next
+IfEnd
+If B=3
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E				'Change to this (Beta 2.2)
+Getkey=37 => Isz E				'Change to this (Beta 2.2)
+E <= -4 => -3 -> E
+E >= 3 => 2 -> E
+Getkey=27 => Isz I
+I=4 => 0 -> I
+If I=0
+Then If O=0 And C<21				'Change to this and remove the line under this (Beta 2.2)
+Then Locate C+1,E+6,"  "					'2 spaces
+Locate C+1,E+4," "
+1 -> O						'Change to this (Beta 2.2)
+IfEnd						'Remove the line under this (Beta 2.2)
+C<21 => E >= -2 => E>H => Locate C+1,E+3,"   "	'Change to this (ver. 4)| 3 spaces
+C<19 => E <= 1 => E<H => Locate C+3,E+6," "	'Change to this (ver. 4)
+C<21 => E<H => Locate C+1,E+5," "		'Change to this (ver. 4)
+C < 20 => Locate C+2,5+E,"* "					'* :  the SYBL menu and f4
+Locate C,4+E,"*** "
+If C>1
+Then C<21 => Mat A[5+E,C+1] <> 0 => Goto 0
+Mat A[4+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then If O=1					'Change to this and remove the line under this (Beta 2.2)
+Then C<20 => Locate C+2,E+4,"  "		'Change to this (ver. 4)| 2 spaces
+C<19 => Locate C+3,E+5," "			'Change to this (ver. 4)
+2 -> O						'Add this (Beta 2.2)
+IfEnd
+E >= 2 => 1 -> E
+C<21 => E <= 0 => E<H => Locate C+1,E+7," "	'Change to this (ver. 4)
+C<21 => E<H => Locate C+1,E+6," "		'---------||------------
+C<21 => E >= -2 => E>H => Locate C+1,E+3,"  "	'---------||------------| 2 spaces
+Locate C,E+4,"** "
+Locate C,E+5,"*  "
+Locate C,E+6,"* "
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 Or Mat A[6+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=2
+Then If O=2					'Change to this (Beta 2.2)
+Then C<21 => E <= 1 => Locate C+1,E+6," "	'Change to this (ver. 4)
+3 -> O						'Add this (Beta 2.2)
+IfEnd
+C<21 => E <= 1 => E<H => Locate C+1,E+6,"   "	'Change to this (ver. 4)| 3 spaces
+C<21 => E >= -2 => E>H => Locate C+1,E+3," "	'Change to this (ver. 4)
+Locate C,E+4,"*   "
+Locate C,E+5,"*** "
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=3
+Then E >= 1 => 1 -> E				'Change to this and remove the line under this (Beta 2.2)
+C<20 => E >= -2 => E>H => Locate C+2,E+3," "	'Change to this (ver. 4)
+C<21 => E <= 0 => E<H => Locate C+1,E+7,"  "	'----------||-----------| 2 spaces
+O=3 => C<20 => Locate C+2,E+5,"  "		'----------||-----------| 2 spaces
+0 -> O						'Add this (Beta 2.2)
+C<21 => Locate C+1,E+4,"* "			'Change to this (ver. 4)
+C<21 => Locate C+1,E+5,"* "			'---------||------------
+Locate C,E+6,"** "
+If C>1
+Then Mat A[E+4,C] <> 0 Or Mat A[E+5,C] <> 0 Or Mat A[E+6,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+Next
+IfEnd
+If B=4
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E
+Getkey=37 => Isz E
+E <= -4 => -3 -> E
+E >= 3 => 2 -> E
+Getkey=27 => Isz I
+I=4 => 0 -> I
+If I=0
+Then If O=3 And C<19				'Change to this (ver. 4)
+Then Locate C+3,E+5,"  "			'2 spaces
+Locate C+3,E+4," "
+0 -> O
+IfEnd
+E >= 2 => 1 -> E
+C<20 => E >= -2 => E>H => Locate C+2,E+3," "	'Change to this (ver. 4)
+C<20 => E <= 0 => E<H => Locate C+2,E+7," "	'---------||------------
+C<21 => Locate C+1,E+4,"8 "
+Locate C,E+5,"88 "
+C<21 => Locate C+1,E+6,"8 "
+If C>1
+Then Mat A[E+4,C] <> 0 Or Mat A[E+5,C-1] <> 0 Or Mat A[E+6,C] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then If O=0 And C<20				'Change to this (ver. 4)
+Then Locate C+2,E+6," "
+1 -> O
+IfEnd
+C<21 => E >= -2 => E>H => Locate C+1,E+3,"   "	'Change to this (ver. 4)| 3 spaces
+C<20 => E <= 1 => E<H => Locate C+2,E+6," "	'Change to this (ver. 4)
+Locate C,E+4,"888 "				'Remove the former line above (Beta 2.2)
+C<21 => Locate C+1,E+5,"8  "			'Change to this (ver. 4)| 2 spaces after the 8
+If C>1
+Then Mat A[E+4,C-1] <> 0 Or Mat A[5+E,C] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=2
+Then If O=1 And C<19				'Change to this (ver. 4)
+Then Locate C+3,E+4," "
+2 -> O
+IfEnd
+E >= 1 => 1 -> E
+C<21 => E >= -2 => E>H => Locate C+1,E+3," "	'Change to this (ver. 4)
+C<21 => E <= 0 => E<H => Locate C+1,E+7," "	'Change to this (ver. 4)
+Locate C,4+E,"8  "
+Locate C,5+E,"88 "
+Locate C,6+E,"8  "
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 Or Mat A[6+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=3
+Then If O=2 And C<21
+Then E <= 1 => Locate C+1,6+E," "
+3 -> O
+IfEnd
+C<20 => E >= -2 => E>H => Locate C+2,3+E," "	'Change to this (ver. 4)
+C<19 => E>H => Locate C+3,4+E," "		'---------||------------
+C<21 => E <= 1 => E<H => Locate C+1,6+E,"   "	'---------||------------| 3 spaces
+C<21 => Locate C+1,4+E,"8  "			'---------||------------| 2 spaces after the 8
+Locate C,5+E,"888 "
+If C>1
+Then Mat A[4+E,C] <> 0 Or Mat A[5+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+Next
+IfEnd
+If B=5					'New section (Beta 2.2)
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E
+Getkey=37 => Isz E
+E <= -4 => -3 -> E
+E >= 3 => 2 -> E
+Getkey=27 => Isz I
+I=2 => 0 -> I
+If I=0
+Then O=0 => C<21 => Locate C+1,E+6," "
+1 -> O
+E <= -2 => E<H => C<21 => Locate C+1,E+3,"  "		'2 spaces
+E <= 1 => E<H => C<20 => Locate C+2,E+6,"  "		'2 spaces
+Locate C,4+E,"@@  "					'2 spaces after the @'s
+C<21 => Locate C+1,5+E,"@@ "
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then E >= 1 => 1 -> E
+O=1 => E <= 1 => C<19 => Locate C+3,E+5," "
+0 -> O
+C<20 => E >= -2 => E>H => Locate C+2,E+3," "		'Change to this (ver. 4)
+C<21 => E <= 0 => E<H => Locate C+1,E+7," "		'Change to this (ver. 4)
+C<21 => Locate C+1,E+4,"@ "				'Change to this (ver. 4)
+Locate C,E+5,"@@ "
+Locate C,E+6,"@  "					'2 spaces after the @
+If C>1
+Then Mat A[E+4,C] <> 0 Or Mat A[E+5,C-1] <> 0 Or Mat A[E+6,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+Next
+IfEnd
+If B=6
+Then For 2 -> A To 22
+For 0 -> D To @
+Next
+23-A -> C
+E -> H
+Getkey=28 => Dsz E
+Getkey=37 => Isz E
+E <= -4 => -3 -> E
+E >= 3 => 2 -> E
+Getkey=27 => Isz I
+I=2 => 0 -> I
+If I=0
+Then O=0 => C<20 => E <= 1 => Locate C+2,E+6," "
+1 -> O
+E >= -2 => E>H => C<20 => Locate C+2,3+E,"  "		'2 spaces
+E <= 1 => E<H => C<21 => Locate C+1,6+E,"  "		'2 spaces
+C<21 => Locate C+1,4+E,"HH "
+Locate C,5+E,"HH  "					'2 spaces after the W's
+If C>1
+Then Mat A[4+E,C] <> 0 Or Mat A[5+E,C-1] <> 0 => Goto 0
+IfEnd
+IfEnd
+If I=1
+Then E >= 1 => 1 -> E
+O=1 => C<19 => Locate C+3,E+4," "
+0 -> O
+C<21 => E >= -2 => E>H => Locate C+1,E+3," "		'Change to this (ver. 4)
+C<20 => E <= 0 => E<H => Locate C+2,E+7," "		'---------||------------
+Locate C,4+E,"H  "					'2 spaces after the W's
+Locate C,5+E,"HH "
+C<21 => Locate C+1,6+E,"H "				'Change to this (ver. 4)
+If C>1
+Then Mat A[4+E,C-1] <> 0 Or Mat A[5+E,C-1] <> 0 Or Mat A[6+E,C] <> 0 => Goto 0
+IfEnd
+IfEnd
+Next
+IfEnd					'End of the new section (Beta 2.2) But there's more...
+Lbl 0
+If B=0
+Then 3+X -> X
+For 0 -> H To 1
+For 4 -> F To 5
+C+H>21 => Goto @						'@ = theta
+1 -> Mat A[F+E,C+H]
+Next
+Next
+IfEnd
+If B=1 And I=0
+Then 5+X -> X
+For 0 -> H To 3
+C+H>21 => Goto @
+2 -> Mat A[4+E,C+H]
+Next
+IfEnd
+If B=1 And I=1
+Then 6+X -> X
+For 0 -> H To 3
+C>21 => Goto @
+2 -> Mat A[4+E+H,C]
+Next
+IfEnd
+If B=2 And I=0
+Then 8+X -> X
+For 0 -> H To 2
+C+2>21 => Goto @			'change to this (Beta 2.1)
+3 -> Mat A[E+4,C+2]
+3 -> Mat A[E+5,C+H]
+Next
+IfEnd
+If B=2 And I=1
+Then 9+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @
+3 -> Mat A[E+4,C]
+3 -> Mat A[E+4+H,C+1]
+Next
+IfEnd
+If B=2 And I=2
+Then 7+X -> X
+For 0 -> H To 2
+C+H>21 => Goto @
+3 -> Mat A[E+4,C+H]
+3 -> Mat A[E+5,C]
+Next
+IfEnd
+If B=2 And I=3
+Then 6+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @
+3 -> Mat A[E+4+H,C]
+3 -> Mat A[E+6,C+1]
+Next
+IfEnd
+If B=3 And I=0
+Then 8+X -> X
+For 0 -> H To 2
+C+2>21 => Goto @			'change to this (beta 2.1)
+4 -> Mat A[E+4,C+H]
+4 -> Mat A[E+5,C+2]
+Next
+IfEnd
+If B=3 And I=1
+Then 6+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @			'change to this (beta 2.1)
+4 -> Mat A[E+4,C+1]
+4 -> Mat A[E+4+H,C]
+Next
+IfEnd
+If B=3 And I=2
+Then 7+X -> X
+For 0 -> H To 2
+C+H>21 => Goto @
+4 -> Mat A[E+4,C]
+4 -> Mat A[E+5,C+H]
+Next
+IfEnd
+If B=3 And I=3
+Then 9+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @			'change to this (beta 2.1)
+4 -> Mat A[E+6,C]
+4 -> Mat A[E+4+H,C+1]
+Next
+IfEnd
+If B=4 And I=0
+Then 8+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @
+5 -> Mat A[4+E+H,C+1]			change to this (beta 2.2)
+5 -> Mat A[5+E,C]
+Next
+IfEnd
+If B=4 And I=1
+Then 8+X -> X
+For 0 -> H To 2
+C+2>21 => Goto @			'change to this (beta 2.2)
+5 -> Mat A[4+E,C+H]
+5 -> Mat A[5+E,C+1]
+Next
+IfEnd
+If B=4 And I=2
+Then 8+X -> X
+For 0 -> H To 2
+C+1>21 => Goto @
+5 -> Mat A[4+E+H,C]
+5 -> Mat A[5+E,C+1]
+Next
+IfEnd
+If B=4 And I=3
+Then 8+X -> X
+For 0 -> H To 2
+C+2>21 => Goto @			'change to this (beta 2.2)
+5 -> Mat A[4+E,C+1]
+5 -> Mat A[5+E,C+H]
+Next
+IfEnd
+If B=5 And I=O				'New section (Beta 2.2)
+Then 7+X -> X
+C+2>21 => Goto @
+6 -> Mat A[4+E,C]
+6 -> Mat A[4+E,C+1]
+6 -> Mat A[5+E,C+1]
+6 -> Mat A[5+E,C+2]
+IfEnd
+If B=5 And I=1
+Then 7+X -> X
+C+1>21 => Goto @
+6 -> Mat A[4+E,C+1]
+6 -> Mat A[5+E,C]
+6 -> Mat A[5+E,C+1]
+6 -> Mat A[6+E,C]
+IfEnd
+If B=6 And I=0
+Then 7+X -> X
+C+2>21 => Goto @
+7 -> Mat A[4+E,C+1]
+7 -> Mat A[4+E,C+2]
+7 -> Mat A[5+E,C]
+7 -> Mat A[5+E,C+1]
+IfEnd
+If B=6 And I=1
+Then 7+X -> X
+C+1>21 => Goto @
+7 -> Mat A[4+E,C]
+7 -> Mat A[5+E,C]
+7 -> Mat A[5+E,C+1]
+7 -> Mat A[6+E,C+1]
+IfEnd					'End of new secton (Beta 2.2) But there's more...
+Int 7Ran# -> B				'Int : OPTN, f6, f4, f2. Ran# : OPTN, f6, f3, f4 (Change this line (Beta 2.2))
+If Z=1
+Then If B=0				'Remove the former line and add this (Beta 2.2) New section...
+Then Locate 21,6,"#"
+Locate 20,6,"#"
+Locate 21,7,"#"
+Locate 20,7,"#"
+IfEnd
+If B=1
+Then Locate 21,7,"O"
+Locate 20,7,"O"
+Locate 19,7,"O"
+Locate 18,7,"O"
+IfEnd
+If B=2
+Then Locate 21,6,"x"
+Locate 21,7,"x"
+Locate 20,7,"x"
+Locate 19,7,"x"
+IfEnd
+If B=3
+Then Locate 21,6,"*"
+Locate 21,7,"*"
+Locate 20,6,"*"
+Locate 19,6,"*"
+IfEnd
+If B=4
+Then Locate 21,5,"8"
+Locate 21,6,"8"
+Locate 21,7,"8"
+Locate 20,6,"8"
+IfEnd
+If B=5
+Then Locate 21,7,"@"
+Locate 20,6,"@"
+Locate 20,7,"@"
+Locate 19,6,"@"
+IfEnd
+If B=6
+Then Locate 21,6,"H"
+Locate 20,6,"H"
+Locate 20,7,"H"
+Locate 19,7,"H"
+IfEnd
+IfEnd				'End of new section (Beta 2.2)...
+G -> S
+Locate 21,2,(100-(@+10))/10		'/ = division-symbol  (Change to this (Beta 2.2))
+For 2 -> A To 21
+22-A -> F
+0 -> D
+For 1 -> C To 7
+Mat A[C,F] <> 0 => Isz D
+Next
+If D=7
+Then Isz G
+For F -> E To 20
+For 1 -> C To 7
+Mat A[C,E+1] -> Mat A[C,E]
+Next
+Next
+IfEnd
+Next
+G-S=1 => 40+X -> X
+G-S=2 => 100+X -> X
+G-S=3 => 300+X -> X
+G-S=4 => 1200+X -> X
+If G-S <> 0
+Then Locate 9,1," POINTS="		'Change to this (ver. 4)
+Locate 17,1,X
+Locate 9,2," ROWS="			'Change to this (ver. 4)
+T=1 => Locate 15,2,G
+T=2 => G <= 25 => Locate 15,2,25-G
+IfEnd					'Add this (ver. 3)
+G-S=4 => Locate 13,4," TETRIS! "	'Change to this and remove the lines under (ver. 4)
+T=2 => G >= 25 => Goto r
+If G-S <> 0				'Add this (ver. 3)
+Then For 1 -> A To 500			'Change to this (ver. 4)
+Next					'Add this (ver. 4)
+ClrText				'Change to this (ver. 3)
+For 1 -> V To 21
+For 1 -> U To 7
+Getkey=31 => Getkey -> M
+Mat A[U,V]=1 => Locate V,U,"#"
+Mat A[U,V]=2 => Locate V,U,"O"
+Mat A[U,V]=3 => Locate V,U,"x"
+Mat A[U,V]=4 => Locate V,U,"*"
+Mat A[U,V]=5 => Locate V,U,"8"
+Mat A[U,V]=6 => Locate V,U,"@"			'Add this (Beta 2.2)
+Mat A[U,V]=7 => Locate V,U,"H"			'Add this (Beta 2.2)
+Next
+Next
+Else Locate 18,7,"    "				'Add this (ver. 3) (4 spaces)
+Locate 19,6,"   "				'Add this (ver. 3) (3 spaces)
+Locare 19,5,"   "				'Add this (ver. 3) (3 spaces)
+IfEnd						'Add this (ver. 3)
+0 -> N
+While M=31
+Getkey -> N
+Locate 7,4," PAUSED "
+Locate 7,4," PAUSED "
+Locate 7,4," PAUSED "
+Locate 7,4,"        "			'8 spaces
+Locate 7,4,"        "
+N=31 => Break
+WhileEnd
+Goto A
+Lbl @
+Locate 6,3,"           "		'11 spaces
+Locate 6,4," GAME OVER "
+Locate 6,5,"           "		'11 spaces
+Do
+LpWhile Getkey <> 31
+ClrText
+Locate 1,1,"TOTAL SCORE="
+Locate 14,1,X
+Locate 1,2,"ROWS="
+Locate 7,2,G
+Do					'Add this (ver. 3)
+LpWhile Getkey <> 31			'Add this (ver. 3)
+Goto E					'Change to this (ver. 3)
+Lbl r
+AxesOff
+GridOff
+LabelOff
+ClrText
+For 1 -> A To 5
+Locate 5,4,"YOU WON!!!"			'! : OPTN, f6, f3, f4
+For 1 -> B To 50
+Next
+Locate 5,4,"          "			'10 spaces
+For 1 -> B To 20
+Next
+Next
+Locate 1,1,"TOTAL SCORE="
+Locate 14,1,X
+Do
+Locate 5,5,"PUSH [EXE]!"
+LpWhile Getkey <> 31
+If ((100-(@+10))/10)=9
+Then Cls
+Text 58,40,"(============)"		'11 ='s
+For 0 -> A To 30 Step 5
+Text 53-A,40,"x"
+Next
+Text 26,44,"---"
+For 0 -> C To 80
+Text 1,40,"           "			'11 spaces
+C<10 => Text 10-C,64,"!"
+C<16 => Text 16-C,62,"("
+C<16 => Text 16-C,67,")"
+C<19 => Text 19-C,63,"-"
+For 0 -> A To 30 Step 4
+C<22+A => Text 22+A-C,61,"[ ]"		'1 space between the [ and ]
+Next
+C<50 => Text 50-C,57,"<= [ ] >="	'Change to this (Beta 2.2) | 1 space between the <= [ and ] >=
+C<55 => Text 55-C,64,"^"		'^ = raised with
+C=5 => Text 58,63,"=="
+If C<58
+Then Orange Text 58-C,63,"W"		'Change to this (Beta 2.2)
+Orange Text 58-C,63,"V"
+Orange Text 58-C,63,"O"
+Orange Text 58-C,63,"M"
+Orange Text 58-C,63,"Y"
+Orange Text 58-C,63,"U"
+Orange Text 58-C,63,"  "		'2 spaces
+IfEnd
+Next
+0 -> C
+For 13 -> B To 127 Step 6
+Isz C
+C=1 => Text 20,B,"C"
+C=2 => Text 20,B,"O"
+C=3 => Text 20,B,"N"
+C=4 => Text 20,B,"G"
+C=5 => Text 20,B,"R"
+C=6 => Text 20,B,"A"
+C=7 => Text 20,B,"T"
+C=8 => Text 20,B,"U"
+C=9 => Text 20,B,"L"
+C=10 => Text 20,B,"A"
+C=11 => Text 20,B,"T"
+C=12 => Text 20,B,"I"
+C=13 => Text 20,B,"O"
+C=14 => Text 20,B,"N"
+C=15 => Text 20,B,"S"
+C=16 => Text 20,B+6,"!"
+Text 1,1," "
+For 1 -> A To 25
+Next
+Next
+For 1 -> A To 500
+Next
+0 -> D
+Cls
+Text 10,30,"GRAPHIC DESIGN:"
+Goto D
+Lbl B
+Cls
+Text 10,30,"PROGRAMMING:"
+Goto D
+Lbl C
+Cls
+Text 10,30,"IDEAS:"
+Lbl D
+Isz D
+0 -> B
+For 1 -> A To 100 Step 5
+Isz B
+B=1 => Text 18,20+A,"B"
+B=2 => Text 18,20+A,"."
+B=3 => Text 18,20+A," "
+B=4 => Text 18,20+A,"R"
+B=5 => Text 18,20+A,"A"
+B=6 => Text 18,20+A,"S"
+B=7 => Text 18,20+A,"M"
+B=8 => Text 18,20+A,"U"
+B=9 => Text 18,20+A,"S"
+B=10 => Text 18,20+A," "
+B=11 => Text 18,20+A,"A"
+B=12 => Text 18,20+A,"N"
+B=13 => Text 18,20+A,"T"
+B=14 => Text 18,20+A,"H"
+B=15 => Text 18,20+A,"I"
+B=16 => Text 18,20+A,"N"
+B=17 => Text 18,20+A,"."
+Text 1,1," "
+For 1 -> C To 25
+Next
+Next
+For 18 -> A To 127 Step 3
+Text 18,A," B. RASMUS ANTHIN."
+Next
+D=1=> Goto B
+D=2=> Goto C
+Cls
+IfEnd					'Add this (ver. 3)
+Do					'Add this (ver. 3)
+LpWhile Getkey <> 31			'Add this (ver. 3)
+AxesOn					'Add this (ver. 3)
+Goto E					'Add this (ver. 3)
